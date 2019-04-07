@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>Connect to ETH</title>
+    </head>
+    <body>
+        <p id="p1">Latest ethereum block = loading...</p>
+    </body>
+
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/web3@0.20.7/dist/web3.js"></script>
+
+    <script src="./constants.js"></script> 
+    <!-- constants.js is gitignored to not expose credentials -->
+
+    <script>
+
+        console.log(`ROPSTEN_URL = ${ROPSTEN_URL}`); // declared in constants.js
+
+        window.addEventListener('load', async () => {
+        // Modern dapp browsers...
+        if (window.ethereum) {
+            window.web3 = new Web3(ethereum);
+            try {
+                // Request account access if needed
+                await ethereum.enable();
+                // Acccounts now exposed
+                await web3.eth.getAccounts(accounts => console.log(accounts[0]));
+            } catch (error) {
+                // User denied account access...
+            }
+        }
+        // Legacy dapp browsers...
+        else if (window.web3) {
+            window.web3 = new Web3(web3.currentProvider);
+            // Acccounts always exposed
+            web3.eth.sendTransaction({/* ... */});
+        }
+        // Non-dapp browsers...
+        else {
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+        }
+    });
+
+    </script>
+</html>
