@@ -1,0 +1,111 @@
+<html>
+    <head>
+        <title>Connect to ETH</title>
+    </head>
+    <body>
+        <p id="p1">Balance = loading...</p>
+    </body>
+
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    
+    <script type="text/javascript" src="./web3.min.js"></script>
+
+    <script>
+        // Due to browser security restrictions, we can't communicate with dapps running on file://. Please use a local server for development.
+        // https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md
+
+        window.addEventListener('load', async () => {
+        // Modern dapp browsers...
+        if (window.ethereum) {
+            console.log(`window.ethereum == true`);
+
+            window.web3 = new Web3(ethereum);
+            try {
+                // Request account access if needed
+                await ethereum.enable();
+                // Acccounts now exposed
+
+                var version = web3.version.api;
+                console.log(`version = ${version}`);
+
+                web3.eth.getAccounts(function(err, accounts){
+                    if (err != null) {
+                        console.log(err)
+                    }
+                    else if (accounts.length === 0) {
+                        console.log('MetaMask is locked')
+                    }
+                    else {
+                        console.log('MetaMask is unlocked');
+                        console.log(`accounts = ${accounts}`);
+                    }
+                });
+
+            } catch (error) {
+                // User denied account access...
+            }
+        }
+        // Legacy dapp browsers...
+        else if (window.web3) {
+            console.log(`window.web3 == true`);
+            window.web3 = new Web3(web3.currentProvider);
+            // Acccounts always exposed
+            web3.eth.sendTransaction({/* ... */});
+        }
+        // Non-dapp browsers...
+        else {
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+
+            if (typeof web3 !== 'undefined') {
+                console.log('Web3 Detected! ' + web3.currentProvider.constructor.name)
+                window.web3 = new Web3(web3.currentProvider);
+            } else {
+                console.log('No Web3 Detected... using HTTP Provider')
+                window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/bcea6c4511764e45bdc6854470620ae5"));
+                try {
+                    let address = "0x71Bc2Ba55706CE5CFCe01c95d9D0b311118e3adc";
+
+                    // web3.eth.getBalance(address, function (error, wei) {
+                    //     if (!error) {
+                    //         var balance = web3.fromWei(wei, 'ether');
+                    //         document.getElementById("p1").innerHTML = "Balance = "+ balance + " ETH";
+                    //     }
+                    // });
+
+                    var number = web3.eth.blockNumber;
+                    console.log(`Block number = ${number}`);
+
+                    var version = web3.version.api;
+                    console.log(`version = ${version}`);
+
+                    var provider = web3.currentProvider;
+                    console.log(`provider = ${JSON.stringify(provider)}`);
+
+                    var defaultAccount = web3.eth.defaultAccount;
+                    console.log(`defaultAccount = ${defaultAccount}`);
+                    // set the default account
+                    web3.eth.defaultAccount = '0x71Bc2Ba55706CE5CFCe01c95d9D0b311118e3adc';
+
+                    // var coinbase = web3.eth.coinbase;
+                    // console.log(`coinbase = ${coinbase}`);
+
+                    var accounts = web3.eth.accounts;
+                    console.log(`accounts = ${accounts}`);
+
+                    web3.eth.getAccounts((err, res) => {                   
+                        console.log(`res[0] = ${res[0]}`);
+                    });
+
+                } catch (error) {
+                    // User denied account access...
+                    console.log(error);
+                }
+            }
+        }
+    });
+
+    </script>
+</html>
