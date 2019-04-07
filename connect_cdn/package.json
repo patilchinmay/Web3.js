@@ -1,0 +1,22 @@
+{
+  "name": "connect_cdn",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "*",
+    "http": "*",
+    "nodemon": "^1.18.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/patilchinmay/Web3.js/tree/master/connect_cdn"
+  },
+  "author": "Chinmay Patil",
+  "license": "ISC"
+}
