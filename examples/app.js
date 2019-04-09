@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 // app.use('/test', testRoutes);
 
 // Serve static files
-app.use('/test', express.static('view'));
+app.use('/web3js', express.static('view'));
 
 // var redis = require('redis');
 // var client = redis.createClient(6379, 'redis')
