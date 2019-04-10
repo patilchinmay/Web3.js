@@ -74,7 +74,7 @@
                 window.web3 = new Web3(web3.currentProvider);
             } else {
                 console.log('No Web3 Detected... using HTTP Provider')
-                window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/bcea6c4511764e45bdc6854470620ae5"));
+                window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/<INFURA-TOKEN>"));
                 try {
                     let address = "0x71Bc2Ba55706CE5CFCe01c95d9D0b311118e3adc";
 
