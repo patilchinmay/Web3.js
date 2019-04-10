@@ -6,6 +6,7 @@
         <p id="p1">Account = loading...</p>
         <p id="p2">Balance = loading...</p>
         <p id="p3"></p>
+        <p id="p4"></p>
     </body>
 
     <script
@@ -44,6 +45,7 @@
                         console.log('MetaMask is unlocked');
                         console.log(`accounts = ${accounts}`);
 
+                        // Balance of the Metamask account
                         web3.eth.getBalance(accounts[0], (error, balance)=>{
                             console.log(`balance = ${balance}`); // instanceof BigNumber
                             console.log(`balance.toString(10) = ${balance.toString(10)}`); // '1000000000000'
@@ -52,6 +54,15 @@
                             $('#p2').html(`Balance = ${web3.fromWei(balance, 'ether')} Ether`);
                         });
                         
+                    }
+                });
+
+                // Balance of a normal random ETH account. This works just with Metamask. No need of Infura.
+                let address_ = "0x829bd824b016326a401d083b33d092293333a830";
+                web3.eth.getBalance(address_, function (error, wei) {
+                    if (!error) {
+                        var balance = web3.fromWei(wei, 'ether');
+                        document.getElementById("p4").innerHTML = "balance of address "+ address_+ " is "+balance + " ETH";
                     }
                 });
 
