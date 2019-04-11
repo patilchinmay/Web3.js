@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <title>Connect to ETH</title>
+    </head>
+    <body>
+        <p id="p1">Description = Program to connect to Metamask using Web3.js</p>
+        <p id="version">Web3js version = 0.20.3</p>
+        <p id="p2">Connecting Metamask...</p>
+    </body>
+
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    
+    <script type="text/javascript" src="./web3.min.js"></script>
+
+    <script>
+        // Due to browser security restrictions, we can't communicate with dapps running on file://. Please use a local server for development.
+        // https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md
+
+        window.addEventListener('load', async () => {
+        // Modern dapp browsers...
+        if (window.ethereum) {
+            console.log(`window.ethereum == true`);
+
+            window.web3 = new Web3(ethereum);
+            try {
+                // Request account access if needed
+                await ethereum.enable();
+                // Acccounts now exposed
+
+                web3.eth.getAccounts(function(err, accounts){
+                    if (err != null) {
+                        console.log(err)
+                    }
+                    else if (accounts.length === 0) {
+                        console.log('MetaMask is locked');
+                        $('#p2').html(`MetaMask is locked. Could not connect!`);
+                    }
+                    else {
+                        $('#p2').html(`MetaMask is unlocked. Connected!`);                    
+                    }
+                });
+
+            } catch (error) {
+                // User denied account access...
+            }
+        }
+        // Legacy dapp browsers...
+        else if (window.web3) {
+            console.log(`window.web3 == true`);
+            window.web3 = new Web3(web3.currentProvider);
+            $('#p2').html(`Legacy dapp browser detected. window.web3 == true == ${window.web3}`);
+            // Acccounts always exposed
+        }
+        // Non-dapp browsers...
+        else {
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+
+            if (typeof web3 !== 'undefined') {
+                console.log('Web3 Detected! Provider = ' + web3.currentProvider.constructor.name);
+                $('#p2').html(`'Web3 Detected! Provider = ${web3.currentProvider.constructor.name}`);
+                window.web3 = new Web3(web3.currentProvider);
+            } else {
+                console.log('No Web3 Detected... using HTTP Provider')
+                $('#p2').html(`Non-dapp browser. No Web3 Detected.`); 
+            }
+        }
+    });
+
+    </script>
+</html>
