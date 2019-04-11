@@ -1,0 +1,95 @@
+<html>
+    <head>
+        <title>Connect to ETH</title>
+    </head>
+    <body>
+        <h1>Connecting to Infura</h1>
+        <div id="output"></div>
+    </body>
+
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    
+    <script type="text/javascript" src="./web3.min.js"></script>
+
+    <script>
+        // Due to browser security restrictions, we can't communicate with dapps running on file://. Please use a local server for development.
+        // https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md
+
+        window.addEventListener('load', async () => {
+        // Modern dapp browsers...
+        if (window.ethereum) {
+            console.log(`window.ethereum == true`);
+
+            // window.web3 = new Web3(ethereum);
+
+            window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/bcea6c4511764e45bdc6854470620ae5"));
+
+                if(window.web3){
+                    document.getElementById("output").innerHTML = "Done! Connected to Infura!";
+                }
+
+            // try {
+                // Request account access if needed
+                // await ethereum.enable();
+                // Acccounts now exposed
+
+                // var version = web3.version.api;
+                // console.log(`version = ${version}`);
+
+                // web3.eth.getAccounts(function(err, accounts){
+                //     if (err != null) {
+                //         console.log(err)
+                //     }
+                //     else if (accounts.length === 0) {
+                //         console.log('MetaMask is locked')
+                //     }
+                //     else {
+                //         console.log('MetaMask is unlocked');
+                //         console.log(`accounts = ${accounts}`);
+
+                //         web3.eth.getBalance(accounts[0], (error, balance)=>{
+                //             console.log(`balance = ${balance}`); // instanceof BigNumber
+                //             console.log(`balance.toString(10) = ${balance.toString(10)}`); // '1000000000000'
+                //             console.log(`balance.toNumber() = ${balance.toNumber()}`); // 1000000000000
+                //             $('#p1').html(`Account = ${accounts}`);
+                //             $('#p2').html(`Balance = ${web3.fromWei(balance, 'ether')} Ether`);
+                //         });
+                        
+                //     }
+                // });
+
+            // } catch (error) {
+                // User denied account access...
+            // }
+        }
+        // Legacy dapp browsers...
+        else if (window.web3) {
+            console.log(`window.web3 == true`);
+            window.web3 = new Web3(web3.currentProvider);
+            // Acccounts always exposed
+            web3.eth.sendTransaction({/* ... */});
+        }
+        // Non-dapp browsers...
+        else {
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+
+            if (typeof web3 !== 'undefined') {
+                console.log('Web3 Detected! ' + web3.currentProvider.constructor.name)
+                window.web3 = new Web3(web3.currentProvider);
+            } else {
+                console.log('No Web3 Detected... using HTTP Provider')
+                window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/bcea6c4511764e45bdc6854470620ae5"));
+
+                if(window.web3){
+                    document.getElementById("output").innerHTML = "Done! Connected to Infura!";
+                }
+                
+            }
+        }
+    });
+
+    </script>
+</html>
