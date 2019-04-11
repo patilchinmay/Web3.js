@@ -13,6 +13,7 @@
         crossorigin="anonymous"></script>
     
     <script type="text/javascript" src="./web3.min.js"></script>
+    <script type="text/javascript" src="./constants.js"></script>
 
     <script>
         // Due to browser security restrictions, we can't communicate with dapps running on file://. Please use a local server for development.
@@ -25,7 +26,7 @@
 
             // window.web3 = new Web3(ethereum);
 
-            window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/bcea6c4511764e45bdc6854470620ae5"));
+            window.web3 = new Web3(new Web3.providers.HttpProvider(`https://ropsten.infura.io/v3/${infura_key}`));
 
                 if(window.web3){
                     document.getElementById("output").innerHTML = "Done! Connected to Infura!";
@@ -81,7 +82,7 @@
                 window.web3 = new Web3(web3.currentProvider);
             } else {
                 console.log('No Web3 Detected... using HTTP Provider')
-                window.web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/bcea6c4511764e45bdc6854470620ae5"));
+                window.web3 = new Web3(new Web3.providers.HttpProvider(`https://ropsten.infura.io/v3/${infura_key}`));
 
                 if(window.web3){
                     document.getElementById("output").innerHTML = "Done! Connected to Infura!";
