@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <title>Connect to ETH</title>
+    </head>
+    <body>
+        <h1>ETH Balance</h1>
+        <p>Enter your Ethereum Address:</p>
+        <input type="text" size="50" id="address" />
+        <button type="button" onClick="getBalance()">Get Balance</button>
+        <br />
+        <br />
+        <div id="output"></div>
+    </body>
+
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    
+    <script type="text/javascript" src="./web3.min.js"></script>
+    <script type="text/javascript" src="./constants.js"></script>
+
+    <script>
+        // Due to browser security restrictions, we can't communicate with dapps running on file://. Please use a local server for development.
+        // https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md
+
+        window.addEventListener('load', async () => {
+        // Modern dapp browsers...
+        if (window.ethereum) {
+            console.log(`window.ethereum == true`);
+
+            window.web3 = new Web3(ethereum);
+
+            window.web3 = new Web3(new Web3.providers.HttpProvider(`https://ropsten.infura.io/v3/${infura_key}`));
+
+                if(window.web3){
+                    document.getElementById("output").innerHTML = "Connected to Infura!";
+                }
+
+        }
+
+        // Legacy dapp browsers...
+        else if (window.web3) {
+            console.log(`window.web3 == true`);
+            window.web3 = new Web3(web3.currentProvider);
+            // Acccounts always exposed
+            web3.eth.sendTransaction({/* ... */});
+        }
+        
+        // Non-dapp browsers...
+        else {
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+
+            if (typeof web3 !== 'undefined') {
+                console.log('Web3 Detected! ' + web3.currentProvider.constructor.name)
+                window.web3 = new Web3(web3.currentProvider);
+            } else {
+                console.log('No Web3 Detected... using HTTP Provider');
+                
+                window.web3 = new Web3(new Web3.providers.HttpProvider(`https://ropsten.infura.io/v3/${infura_key}`));
+                if(window.web3){
+                    document.getElementById("output").innerHTML = "Connected to Infura!";
+                }
+
+            }
+        }
+    });
+
+    function getBalance() {
+        try { 
+            console.log(`Function invoked!`)
+            var address, wei, balance;
+            address = document.getElementById("address").value;
+
+            try {
+                web3.eth.getBalance(address, function (error, wei) {
+                    if (!error) {
+                        var balance = web3.fromWei(wei, 'ether');
+                        document.getElementById("output").innerHTML = balance + " ETH";
+                    }
+                });
+            } catch (err) {
+                document.getElementById("output").innerHTML = err;
+            }
+
+        } catch (error) {
+            // User denied account access...
+            console.log(error);
+        }
+    }
+
+    </script>
+</html>
