@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <title>Provider</title>
+    </head>
+    <body>
+        <p id="p1">Description = Program to retrieve provider</p>
+        <p id="version">Web3js version = 0.20.3</p>
+        <p id="p2">...</p>
+    </body>
+
+    <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    
+    <script type="text/javascript" src="./web3.min.js"></script>
+    <script type="text/javascript" src="./constants.js"></script>
+
+    <script>
+        // Due to browser security restrictions, we can't communicate with dapps running on file://. Please use a local server for development.
+        // https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md
+
+        window.addEventListener('load', async () => {
+        // Modern dapp browsers...(Metamask installed and supported)
+        if (window.ethereum) {
+            
+            console.log(`window.ethereum == true`);
+
+            window.web3 = new Web3(ethereum);
+            try {
+                // Request account access if needed
+                // await ethereum.enable();
+                // Acccounts now exposed
+                    
+                var provider = web3.currentProvider.constructor.name;
+                $('#p2').html(`Provider = ${provider} (retrieved via Metamask)`);
+                
+
+            } catch (error) {
+                // User denied account access...
+                console.log(`Error: ${error}`);
+            }
+        }
+
+        // Legacy dapp browsers...
+        else if (window.web3) {
+            console.log(`window.web3 == true`);
+            window.web3 = new Web3(web3.currentProvider);
+            $('#p2').html(`Legacy dapp browser detected. window.web3 == true == ${window.web3}`);
+            // Acccounts always exposed
+        }
+
+        // Non-dapp browsers...(Metamask not installed. Use Infura as fallback)
+        else {
+            console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+
+            if (typeof web3 !== 'undefined') {
+                console.log('Web3 Detected! Provider = ' + web3.currentProvider.constructor.name);
+                $('#p2').html(`'Web3 Detected! Provider = ${web3.currentProvider.constructor.name}`);
+                window.web3 = new Web3(web3.currentProvider);
+            } else {
+                console.log('No Web3 Detected... using HTTP Provider')
+                window.web3 = new Web3(new Web3.providers.HttpProvider(`https://ropsten.infura.io/v3/${infura_key}`));
+
+                if(window.web3){
+                    var provider = web3.currentProvider.constructor.name;
+                    $('#p2').html(`Provider = ${provider} (retrieved via Infura)`);
+                }
+            }
+        }
+    });
+
+    </script>
+</html>
