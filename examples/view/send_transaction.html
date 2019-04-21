@@ -1,10 +1,13 @@
 <html>
     <head>
-        <title>Provider</title>
+        <title>Send Transaction</title>
     </head>
     <body>
-        <p id="p1">Description = Template for Metamask and Infura for Web3.js</p>
+        <p id="p1">Description = Send ETH to an address</p>
         <p id="p2">...</p>
+        <p>Address</p><input type="text" size="50" id="address" /><br>
+        <p>Amount (Ether)</p><input type="text" size="50" id="amount" />
+        <button type="button" onClick="sendETH()">Send</button>
     </body>
 
     <script
@@ -18,6 +21,10 @@
     <script>
         // Due to browser security restrictions, we can't communicate with dapps running on file://. Please use a local server for development.
         // https://github.com/MetaMask/faq/blob/master/DEVELOPERS.md
+
+        function validateAddress(address){
+            return web3.isAddress(address);
+        }
 
         window.addEventListener('load', async () => {
         // Modern dapp browsers...(Metamask installed and supported)
@@ -68,5 +75,59 @@
         }
     });
 
+    async function sendETH(){
+        try{
+            let address = $('#address').val();
+            let amount = $('#amount').val();
+
+            console.log(`Address = ${address}`);
+            console.log(`Amount = ${amount}`);
+
+            await ethereum.enable();
+
+            web3.eth.getAccounts(function(err, accounts){
+                if (err != null) {
+                    console.log(err)
+                }
+                else if (accounts.length === 0) {
+                    console.log('MetaMask is locked');
+                    $('#p2').html(`MetaMask is connected, but locked. Could not retrieve accounts!`);
+                }
+                else {
+                    // $('#p2').html(`Accounts = ${accounts}`);  
+                    console.log(`Accounts = ${accounts}`);  
+
+                    var value = web3.toWei(amount, 'ether');
+                    console.log(`Amount (wei) = ${value}`);
+
+                    let isAddressValid = validateAddress(address);
+
+                    let transaction_object = {
+                        to: address,
+                        from: accounts[0],
+                        value: value
+                    }
+
+                    console.log(`Transaction Object = ${transaction_object}`);
+
+                    if(isAddressValid && value > 0 && value != null){
+                        var result = web3.eth.sendTransaction(transaction_object , (error, result) => {
+                                        if(error){
+                                            console.log(`Error = ${error}`);
+                                        }
+                                        console.log(`Result = ${result}`);
+                                    });
+                    }else{
+                        console.log(`Address or Amount is incorrect`);
+                        $('#p2').html(`Address or Amount is incorrect`);
+                    }                
+                }
+            });
+
+
+        } catch (err){
+            console.log(`Error = ${err}`);
+        }
+    }
     </script>
 </html>
